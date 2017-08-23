@@ -9,6 +9,7 @@
 from device_access import *
 from device import *
 from device_acces import tryLockDevice, unlockDevice
+from numpy import angle
 
 # Block of response codes for external callers
 RESULT_OK = 0
@@ -23,6 +24,12 @@ def main():
     if sys.argv == 0:
         print("No command line arguments")
 TODO TODO TODO TODO TODO TODO print list of arguements TODO TODO TODO TODO TODO 
+Modes:
+ - turn clockwise by angle
+ - turn counterclockwise by angle
+ - get current angle
+ - calibrate hardware by going counterclockwise will a button is pressed by the contraption 
+   (there is no button at the moment, would need another GPIO pin set to input mode)
         return ERROR_COMMON
     
     if tryLockDevice() == False:
