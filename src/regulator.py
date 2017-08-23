@@ -10,7 +10,9 @@ from device_access import *
 from device import *
 from device_acces import tryLockDevice, unlockDevice
 
+# Block of response codes for external callers
 RESULT_OK = 0
+ERROR_COMMON = 1
 ERROR_DEVICE_IN_USE = 2
 
 def shutdown(ignore1, ignore2):
@@ -18,6 +20,11 @@ def shutdown(ignore1, ignore2):
     sys.exit(0)
 
 def main():
+    if sys.argv == 0:
+        print("No command line arguments")
+TODO TODO TODO TODO TODO TODO print list of arguements TODO TODO TODO TODO TODO 
+        return ERROR_COMMON
+    
     if tryLockDevice() == False:
         print("Another process is accessing the device at the moment.")
         return ERROR_DEVICE_IN_USE
