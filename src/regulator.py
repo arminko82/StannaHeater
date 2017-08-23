@@ -8,6 +8,7 @@
 
 from device import *
 from device_acces import tryLockDevice, unlockDevice
+from Carbon.AppleEvents import kAEAutoDown
 
 # Block of response codes for external callers
 RESULT_OK = 0
@@ -18,16 +19,50 @@ def shutdown(ignore1, ignore2):
     resetGpioState()
     sys.exit(0)
 
+def printDescription(error):
+    print("""{0}
+             Call this using one of the following arguments:
+               -calibrate:    Reset the device by rotating counterclockwise till the clipper button is pushed 
+               -getAngle:     Returns the current angle to std out.
+               -turn <angle>: Rotates the rotor by an given angle that is interpreted 
+                              as floating point. A positive angle is interpreted 
+                              as clockwise.
+              Return values:
+                {1} - Success
+                {2} - Some error that is not specified exactly
+                {3} - Device is currently in use.
+                f.f - In case of success in mode -getAngle the current angle is returned as floating point.
+              Example: python regulator -calibrate""".format(error, RESULT_OK, ERROR_COMMON, ERROR_DEVICE_IN_USE))
+    
+# Parses command and executes. Returns error code or success or an angle if in command mode -getAngle
 def main():
     if sys.argv == 0:
-        print("No command line arguments")
-TODO TODO TODO TODO TODO TODO print list of arguements TODO TODO TODO TODO TODO 
-Modes:
- - turn clockwise by angle
- - turn counterclockwise by angle
- - get current angle
- - calibrate hardware by going counterclockwise will a button is pressed by the contraption 
-   (there is no button at the moment, would need another GPIO pin set to input mode)
+        print("Error: No command line arguments")
+        printDescription()
+        cmd = sys.argv[0]
+    elif sys.argv == 1:
+        if cmd == "-calibrate":
+            return doCalibrate()
+        elif cmd == "-getAngle":
+            return getAngle()
+        else
+            printDescription("Command '{0}' not known".format(cmd))
+    elif sys.argv == 2:
+        if cmd == "-turn":
+            return doTurn(argv[1])
+        else
+            printDescription("Command '{0}' not known".format(cmd))
+    else
+            printDescription("Command '{0}' not known or invalid number of arguments".format(cmd))
+    return ERROR_COMMON
+        
+#TODO TODO TODO TODO TODO TODO print list of arguements TODO TODO TODO TODO TODO 
+#Modes:
+ #- turn clockwise by angle
+ #- turn counterclockwise by angle
+ #- get current angle
+ #- calibrate hardware by going counterclockwise will a button is pressed by the contraption 
+ #  (there is no button at the moment, would need another GPIO pin set to input mode)
         return ERROR_COMMON
     
     if tryLockDevice() == False:
