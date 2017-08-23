@@ -7,7 +7,6 @@ import sys
 import signal
 import RPi.GPIO as GPIO
 import time
-import device_access
 
 FULL_ROTATION_STEPS = 512 # the number of steps for a full rotation of the motor
 
