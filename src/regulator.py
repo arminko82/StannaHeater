@@ -9,7 +9,6 @@
 from device_access import *
 from device import *
 from device_acces import tryLockDevice, unlockDevice
-from numpy import angle
 
 # Block of response codes for external callers
 RESULT_OK = 0
