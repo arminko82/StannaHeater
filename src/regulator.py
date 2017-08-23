@@ -44,14 +44,14 @@ def main():
             return doCalibrate()
         elif cmd == "-getAngle":
             return doGetAngle()
-        else
+        else:
             printDescription("Command '{0}' not known".format(cmd))
     elif sys.argv == 2:
         if cmd == "-turn":
             return doTurn(argv[1])
-        else
+        else:
             printDescription("Command '{0}' not known".format(cmd))
-    else
+    else:
             printDescription("Command '{0}' not known or invalid number of arguments".format(cmd))
     return ERROR_COMMON
         
