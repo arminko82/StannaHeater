@@ -6,7 +6,6 @@
 # the rotor by a certain amount (degree would be nice).
 # Current finding: 512 steps equal a full rotation so that one degree is actually 0.703 degrees
 
-from device_access import *
 from device import *
 from device_acces import tryLockDevice, unlockDevice
 
