@@ -37,14 +37,13 @@ def printDescription(error):
 # Parses command and executes. Returns error code or success or an angle if in command mode -getAngle
 def main():
     if sys.argv == 0:
-        print("Error: No command line arguments")
-        printDescription()
+        printDescription("Error: No command line arguments")
         cmd = sys.argv[0]
     elif sys.argv == 1:
         if cmd == "-calibrate":
             return doCalibrate()
         elif cmd == "-getAngle":
-            return getAngle()
+            return doGetAngle()
         else
             printDescription("Command '{0}' not known".format(cmd))
     elif sys.argv == 2:
@@ -56,15 +55,13 @@ def main():
             printDescription("Command '{0}' not known or invalid number of arguments".format(cmd))
     return ERROR_COMMON
         
-#TODO TODO TODO TODO TODO TODO print list of arguements TODO TODO TODO TODO TODO 
-#Modes:
- #- turn clockwise by angle
- #- turn counterclockwise by angle
- #- get current angle
- #- calibrate hardware by going counterclockwise will a button is pressed by the contraption 
- #  (there is no button at the moment, would need another GPIO pin set to input mode)
-        return ERROR_COMMON
+def doCalibrate():
+    print("todo")
     
+def doGetAngle():
+    print("todo")
+    
+def doTurn(angleString):
     if tryLockDevice() == False:
         print("Another process is accessing the device at the moment.")
         return ERROR_DEVICE_IN_USE
