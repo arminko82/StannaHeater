@@ -15,6 +15,11 @@ RESULT_OK = 0
 ERROR_COMMON = 1
 ERROR_DEVICE_IN_USE = 2
 
+# The file holds the currenty known angle. It is reset to 0 when doCalibrate is called which
+# moves the rotor to the lef-most location and rewrites this file. Any call to doTurn updates the 
+# file's value.
+ANGLE_FILE = "./current_angle.dat"
+
 def shutdown(ignore1, ignore2):
     resetGpioState()
     sys.exit(0)
@@ -36,19 +41,22 @@ def printDescription(error):
     
 # Parses command and executes. Returns error code or success or an angle if in command mode -getAngle
 def main():
-    if sys.argv == 0:
+    cmd = ""
+    argc = len(sys.argv)
+    if argc == 1:
         printDescription("Error: No command line arguments")
-        cmd = sys.argv[0]
-    elif sys.argv == 1:
+    elif argc == 2:
+        cmd = sys.argv[1]
         if cmd == "-calibrate":
             return doCalibrate()
         elif cmd == "-getAngle":
             return doGetAngle()
         else:
             printDescription("Command '{0}' not known".format(cmd))
-    elif sys.argv == 2:
+    elif argc == 3:
+        cmd = sys.argv[1]
         if cmd == "-turn":
-            return doTurn(argv[1])
+            return doTurn(argv[2])
         else:
             printDescription("Command '{0}' not known".format(cmd))
     else:
@@ -56,12 +64,30 @@ def main():
     return ERROR_COMMON
         
 def doCalibrate():
-    print("todo")
-    
+    try:
+        with open(ANGLE_FILE, "w") as file:
+            file.write("0")
+        # todo turn to the left till 0 position before file writing
+        raise Exception("No handling for implemented yet, no hardware created.")
+        return RESULT_OK
+    except Exception as ex:
+        print(ex)
+        return ERROR_COMMON
+            
 def doGetAngle():
-    print("todo")
+    try:
+        with open(ANGLE_FILE) as file:
+            return float(file.readline()) # culture invariant?
+    except:
+        return ERROR_COMMON
     
 def doTurn(angleString):
+    try:
+        angle = float(angleString)
+    except:
+        printDescription("Angle was not a floating point number")
+        return ERROR_COMMON
+    
     if tryLockDevice() == False:
         print("Another process is accessing the device at the moment.")
         return ERROR_DEVICE_IN_USE
