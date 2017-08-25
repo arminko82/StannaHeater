@@ -1,2 +1,3 @@
 *.pyc
 current_angle.dat
+.DS_Store
