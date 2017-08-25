@@ -12,13 +12,13 @@ mDeviceLock = "/var/lock/regulator.lock"
 
 # Tries to lock the device. Boolean return value describes result.
 def tryLockDevice():
-    lockfile = open(mDeviceLock, 'w')       
     try:
+        lockfile = open(mDeviceLock, 'w+') 
         fcntl.lockf(lockfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
         print("Acquired device lock successfully")
         return True
     except:
-        print("Acquired device lock successfully")
+        print("Acquiring device lock failed")
         return False
 
 # Unlocks the device that previously has been locked by the current process. 
