@@ -7,6 +7,7 @@ import sys
 import signal
 import RPi.GPIO as GPIO
 import time
+from custom_exceptions import NoDeviceLibraryFoundException
 
 FULL_ROTATION_STEPS = 512 # the number of steps for a full rotation of the motor
 

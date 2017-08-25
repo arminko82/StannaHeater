@@ -11,6 +11,7 @@ import signal
 from const_vars import mSetupDone
 from device_access import tryLockDevice, unlockDevice
 from logic import doCalibrate, doGetAngle, doTurn
+from custom_exceptions import NoDeviceLibraryFoundException
 
 # Event handler which is run when the current process ends based on a SIGINT.
 # Cleans up.
@@ -63,6 +64,8 @@ def main():
         else:
                 printDescription("Command '{0}' not known or invalid number of arguments".format(cmd))
         return ERROR_COMMON
+    except NoDeviceLibraryFoundException:
+        print("Error: Current computer is either not a raspberry pi or no RPi.GPIO libraries are installed.")
     except Exception as x:
         print("Error: " + x)
     finally:

@@ -8,3 +8,6 @@ class NoDeviceLibraryFoundException(Exception):
     #ctor passes to base
     def __init__(self, message):
         super(NoDeviceLibraryFoundException, self).__init__(message)
+    # bare ctor
+    def __init__(self):
+        super(NoDeviceLibraryFoundException, self).__init__()
