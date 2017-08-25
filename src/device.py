@@ -21,9 +21,13 @@ Seq = list(range(0, StepCount))
 
 # Prepares all definitions and sets up the GPIO ports.
 def setup():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-
+    try:
+        print("Setup: Setting GPIO modes ...")
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+    except:
+        raise NoDeviceLibraryFoundException()
+    
     Seq[0] = [1,0,0,0]
     Seq[1] = [1,1,0,0]
     Seq[2] = [0,1,0,0]
@@ -38,6 +42,12 @@ def setup():
     GPIO.setup(coil_A_2_pin, GPIO.OUT)
     GPIO.setup(coil_B_1_pin, GPIO.OUT)
     GPIO.setup(coil_B_2_pin, GPIO.OUT)
+    
+    print("Setup: Resetting state and enabling power for driver ...")
+    
+    resetGpioState()
+    time.sleep(1)
+    GPIO.output(enable_pin, 1)
     
     print("Device setup complete")
 
