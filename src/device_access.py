@@ -15,7 +15,7 @@ def tryLockDevice():
     try:
         lockfile = open(mDeviceLock, 'w+') 
         fcntl.lockf(lockfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        print("Acquired device lock successfully")
+        print("Locked device")
         return True
     except:
         print("Acquiring device lock failed")
