@@ -1,0 +1,30 @@
+TODOs and hints:
+
+                 
+@ lighttpd server config use these docs:                 
+	- http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs_ModFastCGI
+ 	- http://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfiguration
+	- The following config could help: (?)
+		server.modules = (
+		  "mod_access",
+		  "mod_fastcgi",
+		#  "mod_alias",
+		#  "mod_auth",
+		#  "mod_evasive",
+		#  "mod_redirect",
+		#  "mod_rewrite",
+		#  "mod_setenv",
+		#  "mod_usertrack",
+		)
+		
+		fastcgi.server = ( ".php" => ((                                      
+		                     "bin-path" => "/bin/php-cgi",             
+		                     "socket" => "/tmp/php.socket",              
+		                     "max-procs" => 1,                                     
+		                     "bin-environment" => (                         
+		                       "PHP_FCGI_CHILDREN" => "16",                    
+		                       "PHP_FCGI_MAX_REQUESTS" => "10000"           
+		                     ),         
+		                     "broken-scriptfilename" => "enable"
+		                 )))   
+		
