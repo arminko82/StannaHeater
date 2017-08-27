@@ -2,8 +2,8 @@
 
 # Armin Koefler, file created at 19.08.2017
 # Helper code for regulator<i>.pi
-# Main entry point for application. In the end shall interpret cmd line arguments in order to move
-# the rotor by a certain amount (degree would be nice).
+# Main entry point for application. Cmd line arguments are interpreted in order control the heaters state or
+# to get the current state.
 # Current finding: 512 steps equal a full rotation so that one degree is actually 0.703 degrees
 
 import sys
