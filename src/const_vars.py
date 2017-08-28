@@ -8,7 +8,8 @@
 RESULT_OK = 0
 ERROR_COMMON = 1
 ERROR_DEVICE_IN_USE = 2
-
+# Full collection of error response codes
+RESPONSES = [RESULT_OK, ERROR_COMMON, ERROR_DEVICE_IN_USE]
 #common state
 # Ensures that setup is only performed once.
 mSetupDone = False

@@ -51,8 +51,10 @@ def doGetAngle():
     
 # Creates and opens the angle file, then writes angle into it.
 def writeAngleFile(angle):
+    if any(angle == x for x in RESPONSES):
+        angle = angle + sys.float_info.epsilon
     with open(ANGLE_FILE, "w") as file:
-        file.write(angle)
+        file.write(str(angle))
         
 # Turns the amount defined by angleString and writes the result to the file.
 # The result written to angle file always differs at least by the smallest floating point
