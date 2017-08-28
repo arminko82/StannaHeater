@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup script for StannaHeater by Armin K�fler, 25.08.2017
+# Setup script for StannaHeater by Armin Koefler, 25.08.2017
 # Script shall be run as super user
 
 #1 Install HTTP server 
