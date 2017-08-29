@@ -92,15 +92,21 @@
 			piemenu.animateFinishFunction = function() {
 				const regex = /(\d+)%/u;
 				var item = piemenu.navItems[piemenu.currentClick];
-				var percent  = regex.exec(item.title)[1]
+				var percent  = regex.exec(item.title)[1];
+				
 				$.ajax({
 		  			type: 'POST',
 		  			url: 'regulator.php',
+		  			data: { "execTurn": percent},
 		  			timeout: 10000,
 		  			success: function(data) {
-		      			$("#timer").html(''); 
+		  				alert(data) 				// TODO
+		      			//$("#timer").html(''); 
 		    				window.setTimeout(update, 1000);
 		   			},
+		  			error: function(data) {
+		  				alert("Error: " + data) // TODO
+		   			}
 				});
 			};
         };
