@@ -12,7 +12,8 @@
     <script type="text/javascript" src="wheelnav.js/raphael.min.js"></script>
     <script type="text/javascript" src="wheelnav.js/raphael.icons.min.js"></script>
     <script type="text/javascript" src="wheelnav.js/wheelnav.min.js"></script>
-
+	<script type="text/javascript" src="jquery/jquery-3.2.1.slim.min.js"> </script>
+	
     <style>
         body {
             background-color: #E7E7E7;
@@ -92,11 +93,37 @@
 				const regex = /(\d+)%/u;
 				var item = piemenu.navItems[piemenu.currentClick];
 				var percent  = regex.exec(item.title)[1]
-				alert ("TODO " + percent);
+				$.ajax({
+		  			type: 'POST',
+		  			url: 'regulator.php',
+		  			timeout: 10000,
+		  			success: function(data) {
+		      			$("#timer").html(''); 
+		    				window.setTimeout(update, 1000);
+		   			},
+				});
 			};
         };
     </script>
 
+
+
+	<script type= "text/javascript">
+		$(document).ready(function() {
+		function update() {
+		  $.ajax({
+		   type: 'POST',
+		  url: 'datetime.php',
+		  timeout: 1000,
+		  success: function(data) {
+		      $("#timer").html(''); 
+		    window.setTimeout(update, 1000);
+		   },
+		  });
+		 }
+		});
+	
+	</script>
 </head>
 <body>
     <header>
