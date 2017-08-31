@@ -9,10 +9,10 @@
 
     <title>Stanna Heater</title>
 
-    <script type="text/javascript" src="wheelnav.js/raphael.min.js"></script>
+    <script type="text/javascript" src="wheelnav.js/raphael.min.js" /></script>
     <script type="text/javascript" src="wheelnav.js/raphael.icons.min.js"></script>
     <script type="text/javascript" src="wheelnav.js/wheelnav.min.js"></script>
-	<script type="text/javascript" src="jquery/jquery-3.2.1.slim.min.js"> </script>
+	<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
 	
     <style>
         body {
@@ -71,8 +71,7 @@
     </style>
 
     <script type="text/javascript">
-
-        window.onload = function () {
+		window.onload = function () {
 			var items = ["0%", "20%", "40%", "60%", "80%", "100%"];
             	var piemenu = new wheelnav('piemenu');
 			piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
@@ -93,7 +92,6 @@
 				const regex = /(\d+)%/u;
 				var item = piemenu.navItems[piemenu.currentClick];
 				var percent  = regex.exec(item.title)[1];
-				
 				$.ajax({
 		  			type: 'POST',
 		  			url: 'regulator.php',
