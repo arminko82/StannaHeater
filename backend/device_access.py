@@ -6,6 +6,7 @@
 #  with the stepper motor to ensure mutually exclusive hardware access
 
 import fcntl
+import logging
 
 # lock file definition
 mDeviceLock = "/var/lock/regulator.lock"
@@ -15,10 +16,10 @@ def tryLockDevice():
     try:
         lockfile = open(mDeviceLock, 'w+') 
         fcntl.lockf(lockfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        print("Locked device")
+        logging.debug("Locked device")
         return True
     except:
-        print("Acquiring device lock failed")
+        logging.error("Acquiring device lock failed")
         return False
 
 # Unlocks the device that previously has been locked by the current process. 
@@ -26,5 +27,5 @@ def tryLockDevice():
 def unlockDevice():
         lockfile = open(mDeviceLock, 'w')
         fcntl.lockf(lockfile, fcntl.LOCK_UN)
-        print("Unlocked device")
+        logging.debug("Unlocked device")
         

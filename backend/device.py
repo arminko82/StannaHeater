@@ -4,6 +4,7 @@
 # This device code controls the interaction with the stepper motor driver board.
 
 import sys
+import logging
 import signal
 import RPi.GPIO as GPIO
 import time
@@ -23,7 +24,7 @@ Seq = list(range(0, StepCount))
 # Prepares all definitions and sets up the GPIO ports.
 def setup():
     try:
-        print("Setup: Setting GPIO modes ...")
+        logging.debug("Setup: Setting GPIO modes ...")
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
     except:
@@ -44,28 +45,28 @@ def setup():
     GPIO.setup(coil_B_1_pin, GPIO.OUT)
     GPIO.setup(coil_B_2_pin, GPIO.OUT)
     
-    print("Setup: Resetting state and enabling power for driver ...")
+    logging.debug("Setup: Resetting state and enabling power for driver ...")
     
     resetGpioState()
     time.sleep(1)
     GPIO.output(enable_pin, 1)
     
-    print("Device setup complete")
+    logging.debug("Device setup complete")
 
 def resetGpioState():
     setStep(0,0,0,0)
     GPIO.output(enable_pin, 0)
-    print("GPIO state reset")
+    logging.debug("GPIO state reset")
     
 def forward(delay, steps):
-    print("Turning {0} steps clockwise using a delay of {1}ms".format(steps, delay)) # untested!
+    logging.info("Turning {0} steps clockwise using a delay of {1}ms".format(steps, delay)) # untested!
     for i in range(steps):
         for j in range(StepCount):
             setStep(getItem(j)[0], getItem(j)[1], getItem(j)[2], getItem(j)[3])
             time.sleep(delay)
 
 def backwards(delay, steps):
-    print("Turning {0} steps counterclockwise using a delay of {1}ms".format(steps, delay)) # untested
+    logging.info("Turning {0} steps counterclockwise using a delay of {1}ms".format(steps, delay)) # untested
     for i in range(steps):
         for j in reversed(range(StepCount)):
             setStep(getItem(j)[0], getItem(j)[1], getItem(j)[2], getItem(j)[3])

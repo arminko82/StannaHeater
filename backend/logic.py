@@ -4,6 +4,7 @@
 # This file contains the higher level functions that are invoked by the main method
 
 import sys
+import logging
 from device import *
 from const_vars import *
 from custom_exceptions import NoDeviceLibraryFoundException
@@ -33,7 +34,7 @@ def doCalibrate():
     except NoDeviceLibraryFoundException as e:
         raise # rethrow GPIO error
     except Exception as ex:
-        print(ex)
+        logging.error(ex)
         return ERROR_COMMON
         
 # Reads the current rotor angle from the angle file.
@@ -64,14 +65,14 @@ def doTurn(angleString):
         angle = float(angleString)
         currentAngle = doGetAngle()
         if currentAngle == ERROR_COMMON:
-            print("No calibration found, try to calibrate.")
+            logging.info("No calibration found, try to calibrate.")
             doCalibrate()
         currentAngle = doGetAngle()
         if currentAngle == ERROR_COMMON:
-            print("Could not perform initial calibration.")
+            logging.error("Could not perform initial calibration.")
             return ERROR_COMMON
         else:
-            print("Calibration successful")
+            logging.info("Calibration successful")
         doSetup()
         if angle > 0:
             forward(STEP_DELAY, angleToSteps(angle))
