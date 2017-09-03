@@ -43,26 +43,26 @@
                     text-decoration: underline;
                 }
 
-        #wheelDiv {
+        #piemenu {
             height: 400px;
             width: 400px;
             margin: auto;
         }
 
-        #wheelDiv>svg {
+        #piemenu>svg {
             height: 100%;
             width: 100%;
         }
 
         @media (max-width: 600px) {
-            #wheelDiv {
+            #piemenu {
                 height: 350px;
                 width: 350px;
             }
         }
 
         @media (max-width: 400px) {
-            #wheelDiv {
+            #piemenu {
                 height: 300px;
                 width: 300px;
             }
@@ -108,33 +108,16 @@
 				});
 			};
         };
-    </script>
-
-
-
-	<script type= "text/javascript">
-		$(document).ready(function() {
-		function update() {
-		  $.ajax({
-		   type: 'POST',
-		  url: 'datetime.php',
-		  timeout: 1000,
-		  success: function(data) {
-		      $("#timer").html(''); 
-		    window.setTimeout(update, 1000);
-		   },
-		  });
-		 }
-		});
-	
-	</script>
+    </script>	
 </head>
 <body>
     <header>
-        <p> Stanna Heater </p>
+        <p> Stanna Heater</p>
     </header>
-
 	<div id='piemenu' >
 	</div>
+	<p> bla </p>
+	<p> bla </p>
+	<p> bla </p>
 </body>
 </html>
