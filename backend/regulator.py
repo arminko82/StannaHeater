@@ -44,6 +44,7 @@ def printDescription(error):
 # printed to stdout before the value is actually returned.
 def main():
     logging.basicConfig(filename=LOG_FILE,level=logging.DEBUG,format='%(asctime)s %(message)s')
+    logging.info(sys.argv)
     global mSetupDone
     mSetupDone = False
     if tryLockDevice() == False:
@@ -71,7 +72,7 @@ def main():
         elif argc == 3:
             cmd = sys.argv[1]
             if cmd == "-turn":
-                result = doTurn(argv[2])
+                result = doTurn(sys.argv[2])
                 print result 
                 return result
             else:
