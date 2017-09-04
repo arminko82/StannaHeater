@@ -1,64 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Stanna Heater for boiler control powered by wheelnav.js">
-    <meta name="author" content="Armin Koefler">
-
-    <title>Stanna Heater</title>
-	<link rel="stylesheet" type="text/css" href="index.css">
-
-    <script type="text/javascript" src="js/raphael.min.js" /></script>
-    <script type="text/javascript" src="js/raphael.icons.min.js"></script>
-    <script type="text/javascript" src="js/wheelnav.min.js"></script>
-	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="description" content="Stanna Heater for boiler control powered by wheelnav.js">
+	    <meta name="author" content="Armin Koefler">
 	
-    <script type="text/javascript">
-		window.onload = function () {
-			var items = ["0%", "20%", "40%", "60%", "80%", "100%"];
-            	var piemenu = new wheelnav('piemenu');
-			piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
-			piemenu.slicePathFunction = slicePath().DonutSlice;
-			piemenu.clickModeRotate = false;
-			piemenu.initPercent = 0.1;
-			piemenu.wheelRadius = piemenu.wheelRadius * 1;
-			piemenu.navItemsContinuous = true;
-			piemenu.sliceAngle = 180 / items.length;
-			piemenu.navAngle = -180 + piemenu.sliceAngle / 2;
-			piemenu.sliceSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
-			piemenu.lineSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
-			piemenu.titleSelectedAttr = { fill: '#9CF' };
-			piemenu.createWheel(items);
-
-			// click handler which invokes backend
-			piemenu.animateFinishFunction = function() {
-				const regex = /(\d+)%/u;
-				var item = piemenu.navItems[piemenu.currentClick];
-				var percent  = regex.exec(item.title)[1];
-				$.ajax({
-		  			type: 'POST',
-		  			url: 'regulator.php',
-		  			data: { "execTurn": percent},
-		  			timeout: 10000,
-		  			success: function(data) {
-		  				alert(data) 				// TODO
-		      			//$("#timer").html(''); 
-		    				//window.setTimeout(update, 1000);
-		   			},
-		  			error: function(data) {
-		  				alert("Error: " + data) // TODO
-		   			}
-				});
-			};
-        };
-    </script>	
-</head>
-<body>
-    <header>
-        <p> Stanna Heater</p>
-    </header>
-	<div id='piemenu' ></div>
-</body>
+	    <title>Stanna Heater</title>
+	
+	    <script type="text/javascript" src="js/raphael.min.js"></script>
+	    <script type="text/javascript" src="js/raphael.icons.min.js"></script>
+	    <script type="text/javascript" src="js/wheelnav.min.js"></script>
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		
+		<style>
+	        body {
+	            background-color: #E7E7E7;
+	            font-family: Helvetica, Arial, sans-serif;
+	        }
+	        header {
+	            font-size: x-large;
+	            text-align: center;
+	            background-color: #555;
+	            color: #ddd;
+	            padding: 5px;
+	            font-family: Helvetica, sans-serif;
+	            margin-bottom: 50px;
+	        }
+	        header a {
+	            background-color: #ddd;
+	            color: #555;
+	            text-decoration: none;
+	            padding: 0 3px 0 3px;
+	        }
+	        header a:hover {
+	            background-color: #555;
+	            color: #ddd;
+	            text-decoration: underline;
+	        }
+	        #piemenu {
+	            width: 80%;
+	            margin: auto;
+	        }
+	        #piemenu>svg {
+	            height: 50%;
+	            width: 100%;
+	        }
+	    </style>
+    
+	    <script type="text/javascript">
+			window.onload = function () {
+				var items = ["0%", "20%", "40%", "60%", "80%", "100%"];
+	            	var piemenu = new wheelnav('piemenu');
+				piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
+				piemenu.slicePathFunction = slicePath().DonutSlice;
+				piemenu.clickModeRotate = false;
+				piemenu.initPercent = 0.1;
+				piemenu.wheelRadius = piemenu.wheelRadius * 1;
+				piemenu.navItemsContinuous = true;
+				piemenu.sliceAngle = 180 / items.length;
+				piemenu.navAngle = -180 + piemenu.sliceAngle / 2;
+				piemenu.sliceSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
+				piemenu.lineSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
+				piemenu.titleSelectedAttr = { fill: '#9CF' };
+				piemenu.createWheel(items);
+	
+				// click handler which invokes backend
+				piemenu.animateFinishFunction = function() {
+					const regex = /(\d+)%/u;
+					var item = piemenu.navItems[piemenu.currentClick];
+					var percent  = regex.exec(item.title)[1];
+					$.ajax({
+			  			type: 'POST',
+			  			url: 'regulator.php',
+			  			data: { "execTurn": percent},
+			  			timeout: 10000,
+			  			success: function(data) {
+			  				alert(data) 				// TODO
+			      			//$("#timer").html(''); 
+			    				//window.setTimeout(update, 1000);
+			   			},
+			  			error: function(data) {
+			  				alert("Error: " + data) // TODO
+			   			}
+					});
+				};
+	        };
+	    </script>	
+	</head>
+	<body>
+	    <header id="onehead">
+	        <p> Stanna Heater</p>
+	    </header>
+		<div id='piemenu' ></div>
+	</body>
 </html>
