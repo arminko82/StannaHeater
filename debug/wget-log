@@ -1,0 +1,11 @@
+--2017-09-04 18:26:16--  http://www.wienerzeitung.at/amtsblatt/jobs/lehrerstellen/index.php?fts=italienisch
+Resolving www.wienerzeitung.at... 194.107.62.40
+Connecting to www.wienerzeitung.at|194.107.62.40|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘index.php?fts=italienisch’
+
+index.php?fts=italie     [<=>                  ]       0  --.-KB/s               index.php?fts=italie     [ <=>                 ]  61.30K  --.-KB/s    in 0.1s    
+
+2017-09-04 18:26:16 (502 KB/s) - ‘index.php?fts=italienisch’ saved [62775]
+
