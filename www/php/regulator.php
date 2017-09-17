@@ -1,5 +1,6 @@
 <?php
 define("LOG_FILE", "out.log");
+define("BACKEND_SCRIPT", '../../backend/regulator.py');
 // Return values from controller script
 define("RESULT_OK", '0');
 define("ERROR_COMMON", '1');
@@ -13,6 +14,7 @@ define("ERROR_ANGLE", '-361');
 if (isset($_POST['execTurn']))
 {
     log1("Executing isset1");
+    log1(getcwd());
     return execTurn($_POST['execTurn']);
 }
 elseif (isset($_POST['execCalibrate']))
@@ -32,19 +34,25 @@ else
 }
 // end "init code"
 
+// Executes a shell script and returns repsonse.
+function execute($cmdAndArgs)
+{
+    return shell_exec('python ' .$cmdAndArgs . " 2>&1");
+}
+
 // Forwards the call to the backend controller.
 // Tries to turn the lever to the desired end point.
 function execTurn($desiredAngle)
 {
     log1("Executing execTurn");
-    return evaluateOutput(shell_exec('python ../backend/regulator.py -turn '.$desiredAngle));
+    return evaluateOutput(execute(BACKEND_SCRIPT. ' -turn ' .$desiredAngle));
 }
 
 // Tells the controller to calibrate itself.
 function execCalibrate()
 {
     log1("Executing execCalibrate");
-    return evaluateOutput(shell_exec('python ../backend/regulator.py -calibrate'));
+    return evaluateOutput(execute(BACKEND_SCRIPT. ' -calibrate'));
 }
 
 // Asks the controller for the current state.
@@ -52,7 +60,7 @@ function execCalibrate()
 function execGetAngle()
 {
     log1("Executing execGetAngle");
-    $output = shell_exec('python ../backend/regulator.py -getAngle');
+    $output = execute(BACKEND_SCRIPT. ' -getAngle');
     $interpretation = evaluateOutput($output);
     if ($interpretation != null)
         return ERROR_ANGLE; // bool
@@ -65,9 +73,8 @@ function execGetAngle()
 // @return bool|null
 function evaluateOutput($output)
 {
-    $out = bin2hex($output);
-    log1("evaluateOutput: " . $out);
-    echo strval($output); // actual HTTP response output writer
+    log1("evaluateOutput: " .$output);
+    echo  $output; // actual HTTP response output writer
     switch ($output) {
         case RESULT_OK:
             return true;
