@@ -27,4 +27,4 @@ mkdir /var/www/regulator
 cp -r ../www/* /var/www/regulator/
 chown -R www-regulator:www-regulator /var/www/regulator
 
-#7 Register HTTP server to auto-start 
+#7 Register HTTP server to auto-start  !TODO!
