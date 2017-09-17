@@ -1,3 +1,4 @@
 *.pyc
 current_angle.dat
 .DS_Store
+out.log
