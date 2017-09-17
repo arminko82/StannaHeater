@@ -9,10 +9,11 @@
 	
 	    <title>Stanna Heater</title>
 	
-	    <script type="text/javascript" src="js/raphael.min.js"></script>
-	    <script type="text/javascript" src="js/raphael.icons.min.js"></script>
-	    <script type="text/javascript" src="js/wheelnav.min.js"></script>
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	    <script type="text/javascript" src="regulator.js"></script>
+	    <script type="text/javascript" src="third-party/js/raphael.min.js"></script>
+	    <script type="text/javascript" src="third-party/js/raphael.icons.min.js"></script>
+	    <script type="text/javascript" src="third-party/js/wheelnav.min.js"></script>
+		<script type="text/javascript" src="third-party/js/jquery-3.2.1.min.js"></script>
 		
 		<style>
 	        body {
@@ -50,43 +51,7 @@
 	    </style>
     
 	    <script type="text/javascript">
-			window.onload = function () {
-				var items = ["0%", "20%", "40%", "60%", "80%", "100%"];
-	            	var piemenu = new wheelnav('piemenu');
-				piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
-				piemenu.slicePathFunction = slicePath().DonutSlice;
-				piemenu.clickModeRotate = false;
-				piemenu.initPercent = 0.1;
-				piemenu.wheelRadius = piemenu.wheelRadius * 1;
-				piemenu.navItemsContinuous = true;
-				piemenu.sliceAngle = 180 / items.length;
-				piemenu.navAngle = -180 + piemenu.sliceAngle / 2;
-				piemenu.sliceSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
-				piemenu.lineSelectedAttr = { stroke: '#9CF', 'stroke-width': 4 };
-				piemenu.titleSelectedAttr = { fill: '#9CF' };
-				piemenu.createWheel(items);
-	
-				// click handler which invokes backend
-				piemenu.animateFinishFunction = function() {
-					const regex = /(\d+)%/u;
-					var item = piemenu.navItems[piemenu.currentClick];
-					var percent  = regex.exec(item.title)[1];
-					$.ajax({
-			  			type: 'POST',
-			  			url: 'regulator.php',
-			  			data: { "execTurn": percent},
-			  			timeout: 10000,
-			  			success: function(data) {
-			  				alert(data) 				// TODO
-			      			//$("#timer").html(''); 
-			    				//window.setTimeout(update, 1000);
-			   			},
-			  			error: function(data) {
-			  				alert("Error: " + data) // TODO
-			   			}
-					});
-				};
-	        };
+			window.onload = createWheel;
 	    </script>	
 	</head>
 	<body>
@@ -94,5 +59,8 @@
 	        <p> Stanna Heater</p>
 	    </header>
 		<div id='piemenu' ></div>
+		<div id='statusDiv'>
+		<h2 id='status'></h2>
+		</div>
 	</body>
 </html>
