@@ -1,7 +1,13 @@
 <?php
+
+// Define behaviour
+define("WRITE_LOG", false);
+
+// Define file system related stuff
 define("LOG_FILE", "out.log");
 define("BACKEND_SCRIPT", '../../backend/regulator.py');
-// Return values from controller script
+
+// Define business states
 define("RESULT_OK", '0');
 define("ERROR_COMMON", '1');
 define("ERROR_DEVICE_IN_USE", '2');
@@ -14,7 +20,6 @@ define("ERROR_ANGLE", '-361');
 if (isset($_POST['execTurn']))
 {
     log1("Executing isset1");
-    log1(getcwd());
     return execTurn($_POST['execTurn']);
 }
 elseif (isset($_POST['execCalibrate']))
@@ -89,6 +94,8 @@ function evaluateOutput($output)
 // A logger that writes to stdout while in debug mode
 function log1($msg)
 {
+    if(WRITE_LOG == false)
+        return;
     date_default_timezone_set('Europe/Vienna');
     $now = date("Y-m-d H:i:s");
     $line = sprintf("%s => %s\r\n", $now, $msg);
