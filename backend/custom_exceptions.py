@@ -11,3 +11,12 @@ class NoDeviceLibraryFoundException(Exception):
     # bare ctor
     def __init__(self):
         super(NoDeviceLibraryFoundException, self).__init__()
+
+# An angle was requested for the rotor that lies outside allowed bounds
+class BoundaryException(Exception):
+    #ctor passes to base
+    def __init__(self, message):
+        super(BoundaryException, self).__init__(message)
+    # bare ctor
+    def __init__(self):
+        super(BoundaryException, self).__init__()

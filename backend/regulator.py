@@ -12,7 +12,7 @@ import logging
 from const_vars import mSetupDone, ERROR_DEVICE_IN_USE, ERROR_COMMON, RESULT_OK
 from device_access import tryLockDevice, unlockDevice
 from logic import doCalibrate, doGetAngle, doTurn
-from custom_exceptions import NoDeviceLibraryFoundException
+from custom_exceptions import NoDeviceLibraryFoundException, BoundaryException
 
 LOG_FILE = "/var/log/StannaHeater/backend.log"
 
@@ -83,6 +83,9 @@ def main():
         return ERROR_COMMON
     except NoDeviceLibraryFoundException:
         logging.error("Error: Current computer is either not a raspberry pi or no RPi.GPIO libraries are installed.")
+        print ERROR_COMMON
+    except BoundaryException:
+        logging.error("Desired angle outside bounds.")
         print ERROR_COMMON
     except Exception as x:
         logging.error("Unhandled error: " + x)

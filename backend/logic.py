@@ -7,12 +7,15 @@ import sys
 import logging
 from device import *
 from const_vars import *
-from custom_exceptions import NoDeviceLibraryFoundException
+from custom_exceptions import NoDeviceLibraryFoundException, BoundaryException
 
 # The file holds the currently known angle. It is reset to 0 when doCalibrate is called which
 # moves the rotor to the left-most location and rewrites this file. Any call to doTurn updates the 
 # file's value.
 ANGLE_FILE = "./current_angle.dat"
+#Specifes the minimal and the maximal angle the rotor may not surpass.
+# Line 0 contains min angle, line 1 max angle
+BORDER_ANGLE_FILE = "./border_angles.cfg"
 STEP_DELAY = 5 # ms
 
 # Executes the device's setup if not done before.
@@ -45,11 +48,23 @@ def doCalibrate():
 # but at least differs the smallest epsilon possible from it.    
 def doGetAngle():
     try:
-        with open(ANGLE_FILE) as file:
-            return float(file.readline()) # culture invariant?
+        min, max = readBorders()
+        with open(ANGLE_FILE) as f:
+            return "{0}|{1}|{2}".format(min,
+                                        max,
+                                        f.readline().strip())  # current
     except:
         return ERROR_COMMON
-    
+
+#Reads the content of the corger
+def readBorders():
+    try:
+        with open(BORDER_ANGLE_FILE) as b:
+                return (b.readline().strip(),  # min
+                        b.readline().strip())  # max
+    except:
+        return ERROR_COMMON
+        
 # Creates and opens the angle file, then writes angle into it.
 def writeAngleFile(angle):
     if any(angle == x for x in RESPONSES):
@@ -63,6 +78,9 @@ def writeAngleFile(angle):
 def doTurn(angleString):
     try:
         angle = float(angleString)
+        min, max = readBorders()
+        if float(min) > angle or float(max) < angle:
+            raise BoundaryException()
         currentAngle = doGetAngle()
         if currentAngle == ERROR_COMMON:
             logging.info("No calibration found, try to calibrate.")
@@ -83,6 +101,9 @@ def doTurn(angleString):
         return RESULT_OK
     except NoDeviceLibraryFoundException as e:
         raise # rethrow GPIO error
+    except BoundaryException:
+        logging.error("Requested angle outside bounds.")
+        return ERROR_COMMON
     except:
         printDescription("Angle was not a floating point number")
         return ERROR_COMMON
