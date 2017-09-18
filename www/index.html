@@ -15,6 +15,8 @@
 	    <script type="text/javascript" src="third-party/js/wheelnav.min.js"></script>
 		<script type="text/javascript" src="third-party/js/jquery-3.2.1.min.js"></script>
 		
+		<link rel="stylesheet" type="text/css" href="index.css" />
+		
 		<style>
 	        body {
 	            background-color: #E7E7E7;
@@ -43,6 +45,7 @@
 	        #piemenu {
 	            width: 80%;
 	            margin: auto;
+			    margin-bottom: -50%;
 	        }
 	        #piemenu>svg {
 	            height: 50%;
@@ -59,8 +62,22 @@
 	        <p> Stanna Heater</p>
 	    </header>
 		<div id='piemenu' ></div>
+		<div class="sk-fading-circle" id="hourglass" style="visibility: hidden">
+		  <div class="sk-circle1 sk-circle"></div>
+		  <div class="sk-circle2 sk-circle"></div>
+		  <div class="sk-circle3 sk-circle"></div>
+		  <div class="sk-circle4 sk-circle"></div>
+		  <div class="sk-circle5 sk-circle"></div>
+		  <div class="sk-circle6 sk-circle"></div>
+		  <div class="sk-circle7 sk-circle"></div>
+		  <div class="sk-circle8 sk-circle"></div>
+		  <div class="sk-circle9 sk-circle"></div>
+		  <div class="sk-circle10 sk-circle"></div>
+		  <div class="sk-circle11 sk-circle"></div>
+		  <div class="sk-circle12 sk-circle"></div>
+		</div>
 		<div id='statusDiv'>
-		<h2 id='status'></h2>
+			<h2 id='status'></h2>
 		</div>
 	</body>
 </html>

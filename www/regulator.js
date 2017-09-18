@@ -26,8 +26,8 @@ function createWheel() {
 
 	for (i = 0; i < piemenu.navItems.length; i++) {
 		var item = piemenu.navItems[i];
-		item.navSlice.mouseup(showPendingState);
-		item.navTitle.mouseup(showPendingState);
+		item.navSlice.mouseup(beginPendingState);
+		item.navTitle.mouseup(beginPendingState);
 	}
 	// click handler which invokes backend
 	piemenu.animateFinishFunction = function() {
@@ -47,9 +47,8 @@ function createWheel() {
 				handleResponse(data);
 			},
 			error : function(data) { // timeout
-				showResult("FAILED");
-				setTimeout(function() {
-				}, 5000)
+				endPendingState("FAILED");
+				clearDelayed();
 			}
 		});
 	};
@@ -60,28 +59,40 @@ function handleResponse(response) {
 	response = response.trim();
 	switch (response) {
 	case '0':
-		showResult("OK");
+		endPendingState("OK");
 		break;
 	case '1':
-		showResult("ERROR");
+		endPendingState("ERROR");
 		break;
 	case '2':
-		showResult("DEVICE IN USE");
+		endPendingState("DEVICE IN USE");
 		break;
 	case '3':
-		showResult("ERROR");
+		endPendingState("ERROR");
 		break;
 	case '-361':
-		showResult("ERROR");
+		endPendingState("ERROR");
 		break;
 	}
+	clearDelayed();
 }
-function getStateElement() {
-	return document.getElementById('status');
+function notify(text) {
+	document.getElementById('status').innerHTML = text;
 }
-function showResult(resultName) {
-	getStateElement().innerHTML = resultName;
+function clearDelayed() {
+	setTimeout(clear, 5000);
 }
-function showPendingState() {
-	showResult("... working ...");
+function clear() {
+	notify("");
+}
+function getHourglass() {
+	return document.getElementById('hourglass'); 
+}
+function beginPendingState() {
+	getHourglass().style.visibility = 'visible';
+	notify("... working ...");
+}
+function endPendingState(result) {
+	getHourglass().style.visibility = 'hidden';
+	notify(result);
 }
