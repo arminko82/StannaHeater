@@ -3,19 +3,21 @@
 # Armin Koefler, file created at 24.08.2017
 # This file contains the higher level functions that are invoked by the main method
 
+import os
 import sys
 import logging
 from device import *
-from const_vars import *
+from const_vars import mSetupDone, ERROR_DEVICE_IN_USE, ERROR_COMMON, RESULT_OK
 from custom_exceptions import NoDeviceLibraryFoundException, BoundaryException
 
 # The file holds the currently known angle. It is reset to 0 when doCalibrate is called which
 # moves the rotor to the left-most location and rewrites this file. Any call to doTurn updates the 
 # file's value.
-ANGLE_FILE = "./current_angle.dat"
+ANGLE_FILE = "current_angle.dat"
 #Specifes the minimal and the maximal angle the rotor may not surpass.
 # Line 0 contains min angle, line 1 max angle
-BORDER_ANGLE_FILE = "./border_angles.cfg"
+BORDER_ANGLE_FILE = "border_angles.cfg"
+# Defines the turning speed of the motor in millisconds per step.
 STEP_DELAY = 5 # ms
 
 # Executes the device's setup if not done before.
@@ -49,7 +51,7 @@ def doCalibrate():
 def doGetAngle():
     try:
         min, max = readBorders()
-        with open(ANGLE_FILE) as f:
+        with open(getPath(ANGLE_FILE)) as f:
             return "{0}|{1}|{2}".format(min,
                                         max,
                                         f.readline().strip())  # current
@@ -59,7 +61,7 @@ def doGetAngle():
 #Reads the content of the corger
 def readBorders():
     try:
-        with open(BORDER_ANGLE_FILE) as b:
+        with open(getPath(BORDER_ANGLE_FILE)) as b:
                 return (b.readline().strip(),  # min
                         b.readline().strip())  # max
     except:
@@ -69,7 +71,7 @@ def readBorders():
 def writeAngleFile(angle):
     if any(angle == x for x in RESPONSES):
         angle = angle + sys.float_info.epsilon
-    with open(ANGLE_FILE, "w") as file:
+    with open(getPath(ANGLE_FILE), "w") as file:
         file.write(str(angle))
         
 # Turns the amount defined by angleString and writes the result to the file.
@@ -107,3 +109,7 @@ def doTurn(angleString):
     except:
         printDescription("Angle was not a floating point number")
         return ERROR_COMMON
+
+def getPath(file):
+    base = os.path.dirname(os.path.realpath(sys.argv[0]))
+    return os.path.join(base, file)
