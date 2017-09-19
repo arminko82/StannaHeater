@@ -1,8 +1,10 @@
 // Frontend JS part of regulator project
 
+var piemenu;
+
 function createWheel() {
 	var items = [ "0%", "20%", "40%", "60%", "80%", "100%" ];
-	var piemenu = new wheelnav('piemenu');
+	piemenu = new wheelnav('piemenu');
 	piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
 	piemenu.slicePathFunction = slicePath().DonutSlice;
 	piemenu.clickModeRotate = false;
@@ -29,29 +31,53 @@ function createWheel() {
 		item.navSlice.mouseup(beginPendingState);
 		item.navTitle.mouseup(beginPendingState);
 	}
-	// click handler which invokes backend
-	piemenu.animateFinishFunction = function() {
-		const regex = /(\d+)%/u;
-		var item = piemenu.navItems[piemenu.currentClick];
-		var percent = regex.exec(item.title)[1];
+	piemenu.animateFinishFunction = handleUserRequest;
+	getCurrentPercent();
+}
 
-		// TODO handle percent as absolute on php side
-		$.ajax({
-			type : 'POST',
-			url : 'php/regulator.php',
-			data : {
-				"execTurn" : percent
-			},
-			timeout : 10000,
-			success : function(data) {
-				handleResponse(data);
-			},
-			error : function(data) { // timeout
-				endPendingState("FAILED");
-				clearDelayed();
-			}
-		});
-	};
+function getCurrentPercent() {
+	$.ajax({
+		type : 'POST',
+		url : 'php/regulator.php',
+		data : {
+			"execGetAngle" : ''
+		},
+		timeout : 1000,
+		success : function(data) {
+			
+			piemenu.selectedNavItemIndex = data;
+			clear();
+		},
+		error : function(data) { // timeout
+			piemenu.selectedNavItemIndex = null;
+			endPendingState(" State Request Failed");
+			clearDelayed();
+		}
+	});
+}
+
+function handleUserRequest() {
+	
+	const regex = /(\d+)%/u;
+	var item = piemenu.navItems[piemenu.currentClick];
+	var percent = regex.exec(item.title)[1];
+
+	// TODO handle percent as absolute on php side
+	$.ajax({
+		type : 'POST',
+		url : 'php/regulator.php',
+		data : {
+			"execTurn" : percent
+		},
+		timeout : 10000,
+		success : function(data) {
+			handleResponse(data);
+		},
+		error : function(data) { // timeout
+			endPendingState("FAILED");
+			clearDelayed();
+		}
+	});
 }
 
 function handleResponse(response) {
