@@ -7,7 +7,7 @@ import os
 import sys
 import logging
 from device import *
-from const_vars import mSetupDone, ERROR_DEVICE_IN_USE, ERROR_COMMON, RESULT_OK
+from const_vars import mSetupDone, ERROR_COMMON, RESULT_OK
 from custom_exceptions import NoDeviceLibraryFoundException, BoundaryException
 
 # The file holds the currently known angle. It is reset to 0 when doCalibrate is called which
