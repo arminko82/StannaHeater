@@ -22,6 +22,11 @@ if (isset($_POST['execTurn']))
     log1("Executing isset1");
     return execTurn($_POST['execTurn']);
 }
+elseif (isset($_POST['execTurnPercent']))
+{
+    log1("Executing isset1.1");
+    return execTurnPercent($_POST['execTurnPercent']);
+}
 elseif (isset($_POST['execCalibrate']))
 {
     log1("Executing isset2");
@@ -52,6 +57,21 @@ function execTurn($desiredAngle)
     log1("Executing execTurn");
     return evaluateOutput(execute(BACKEND_SCRIPT. ' -turn ' .$desiredAngle));
 }
+// Forwards the call to the backend controller.
+// The paramter is to be interpreted as percent of the rotor controlled opening.
+function execTurnPercent($desiredPercent)
+{
+    log1("Executing execTurnPercent");
+    $output = execute(BACKEND_SCRIPT. ' -getAngle');
+    if($output == ERROR_COMMON) {
+        echo ERROR_COMMON;
+        return ERROR_COMMON;
+    }
+    $parts = explode("|", $output);
+    $angle = ($parts[1] - $parts[0]) / 100 * $desiredPercent;
+    log1($angle);
+    return execTurn($angle);
+}
 
 // Tells the controller to calibrate itself.
 function execCalibrate()
@@ -62,13 +82,12 @@ function execCalibrate()
 
 // Asks the controller for the current state.
 // Returns false on error and null on a detected angle that differs from the error codes.
+// While the angle read from the controller is given as a angle, 
 function execGetAngle()
 {
     log1("Executing execGetAngle");
     $output = execute(BACKEND_SCRIPT. ' -getAngle');
-    $interpretation = evaluateOutput($output);
-    if ($interpretation != null)
-        return ERROR_ANGLE; // bool
+    echo $output;
     return $output;
 }
 
