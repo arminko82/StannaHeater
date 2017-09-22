@@ -86,7 +86,7 @@ function handleUserRequest() {
 		},
 		timeout : 10000,
 		success : function(data) {
-			handleResponse(data);
+			handleResponse(data, index);
 		},
 		error : function(data) { // timeout
 			endPendingState("FAILED");
@@ -95,12 +95,12 @@ function handleUserRequest() {
 	});
 }
 
-function handleResponse(response) {
-	// TODO reset state on error
+function handleResponse(response, desiredIndex) {
 	response = response.trim();
 	switch (response) {
 	case '0':
-		endPendingState("OK");
+		mCurrentIndex = desiredIndex;
+		endPendingState("OK", false);
 		break;
 	case '1':
 		endPendingState("ERROR");
@@ -113,6 +113,9 @@ function handleResponse(response) {
 		break;
 	case '-361':
 		endPendingState("ERROR");
+		break;	
+	default:
+		endPendingState("ERROR: Unknown response: " + response);
 		break;
 	}
 	clearDelayed();
@@ -133,8 +136,10 @@ function beginPendingState() {
 	getHourglass().style.visibility = 'visible';
 	notify("... working ...");
 }
-function endPendingState(result) {
+function endPendingState(result, error=true) {
 	getHourglass().style.visibility = 'hidden';
+	if(error)
+		piemenu.navigateWheel(mCurrentIndex == -1 ? null : mCurrentIndex); // revert view
 	notify(result);
 }
 function diff(a, b) {
