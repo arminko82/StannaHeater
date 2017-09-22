@@ -21,8 +21,13 @@ enable_pin   = 7 # main switch
 StepCount = 8
 Seq = list(range(0, StepCount))
 
-# Prepares all definitions and sets up the GPIO ports.
+# Calls setup and powers on
 def setup():
+    setup(true)
+
+# Prepares all definitions and sets up the GPIO ports.
+# On powerOn set the main switch is turned on at the end of setup
+def setup(powerOn):
     try:
         logging.debug("Setup: Setting GPIO modes ...")
         GPIO.setmode(GPIO.BCM)
@@ -50,8 +55,8 @@ def setup():
     
     resetGpioState()
     time.sleep(1)
-    GPIO.output(enable_pin, 1)
-    
+    if powerOn:
+        GPIO.output(enable_pin, 1)
     logging.debug("Device setup complete")
 
 def resetGpioState():
