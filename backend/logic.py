@@ -28,8 +28,7 @@ def doSetup():
     mSetupDone = True
     setup()
 
-# Power is on while the current process is active, so this is a placeholder to
-# be called doing nothing and implicitly powering down after process ends.
+# Performs setup which automatically cleans GPIO state when the process ends.
 def powerOff():
     doSetup()
     return RESULT_OK
