@@ -1,9 +1,10 @@
 // Frontend JS part of regulator project
 
 var piemenu;
+var STAGES = [ "0%", "20%", "40%", "60%", "80%", "100%" ];
+var mCurrentIndex = -1;
 
 function createWheel() {
-	var items = [ "0%", "20%", "40%", "60%", "80%", "100%" ];
 	piemenu = new wheelnav('piemenu');
 	piemenu.sliceInitPathFunction = piemenu.slicePathFunction;
 	piemenu.slicePathFunction = slicePath().DonutSlice;
@@ -11,7 +12,7 @@ function createWheel() {
 	piemenu.initPercent = 0.1;
 	piemenu.wheelRadius = piemenu.wheelRadius * 1;
 	piemenu.navItemsContinuous = true;
-	piemenu.sliceAngle = 180 / items.length;
+	piemenu.sliceAngle = 180 / STAGES.length;
 	piemenu.navAngle = -180 + piemenu.sliceAngle / 2;
 	piemenu.sliceSelectedAttr = {
 		stroke : '#9CF',
@@ -24,7 +25,7 @@ function createWheel() {
 	piemenu.titleSelectedAttr = {
 		fill : '#9CF'
 	};
-	piemenu.createWheel(items);
+	piemenu.createWheel(STAGES);
 
 	for (i = 0; i < piemenu.navItems.length; i++) {
 		var item = piemenu.navItems[i];
@@ -44,12 +45,25 @@ function getCurrentPercent() {
 		},
 		timeout : 1000,
 		success : function(data) {
-			
-			piemenu.selectedNavItemIndex = data;
+			var parts = data.trim().split("|").map(parseFloat);
+			var readPercent = parts[2] / (parts[1] - parts[0]) * 100;
+			const regex = getPattern();
+			var minDiff = Number.MAX_VALUE;
+			var i = 0;
+			for(; i < STAGES.length; i++) {
+				stageValue = regex.exec(STAGES[i])[1];
+				var d = diff(readPercent, stageValue); 
+				if(d > minDiff)
+					break; // have desired i now
+				minDiff = d;
+			}
+			mCurrentIndex = i;
+			piemenu.navigateWheel(i);
 			clear();
 		},
 		error : function(data) { // timeout
-			piemenu.selectedNavItemIndex = null;
+			mCurrentIndex = -1;
+			piemenu.navigateWheel(null);
 			endPendingState(" State Request Failed");
 			clearDelayed();
 		}
@@ -57,17 +71,17 @@ function getCurrentPercent() {
 }
 
 function handleUserRequest() {
-	
-	const regex = /(\d+)%/u;
-	var item = piemenu.navItems[piemenu.currentClick];
+	const regex = getPattern();
+	var index = piemenu.currentClick;
+	if(index == mCurrentIndex)
+		return;
+	var item = piemenu.navItems[index];
 	var percent = regex.exec(item.title)[1];
-
-	// TODO handle percent as absolute on php side
 	$.ajax({
 		type : 'POST',
 		url : 'php/regulator.php',
 		data : {
-			"execTurn" : percent
+			"execTurnPercent" : percent
 		},
 		timeout : 10000,
 		success : function(data) {
@@ -121,4 +135,10 @@ function beginPendingState() {
 function endPendingState(result) {
 	getHourglass().style.visibility = 'hidden';
 	notify(result);
+}
+function diff(a, b) {
+	return Math.abs(a - b);
+}
+function getPattern() {
+	return /(\d+)%/u;
 }
