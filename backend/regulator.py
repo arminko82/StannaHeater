@@ -6,6 +6,7 @@
 # to get the current state.
 # Current finding: 512 steps equal a full rotation so that one degree is actually 0.703 degrees
 
+import os
 import sys
 import signal
 import logging
@@ -14,7 +15,9 @@ from device_access import tryLockDevice, unlockDevice
 from logic import powerOff, doCalibrate, doGetAngle, doTurn
 from custom_exceptions import NoDeviceLibraryFoundException, BoundaryException
 
-LOG_FILE = "/var/log/StannaHeater/backend.log"
+LOG_FILE = "backend.log"
+LOG_PATH1 = "/var/log/StannaHeater/"
+LOG_PATH2  = "."
 
 # Event handler which is run when the current process ends based on a SIGINT.
 # Cleans up.
@@ -39,13 +42,28 @@ def printDescription(error):
     \d|\d|\d  - In case of success in mode -getAngle the return value is  
                 the triple of min angle, max angle and current angle
   Example: python regulator -calibrate""".format(error, RESULT_OK, ERROR_COMMON, ERROR_DEVICE_IN_USE))
+
+# Tries to create a logging file
+def configureLogging():
+    level = logging.DEBUG
+    file = os.path.join(LOG_PATH1, LOG_FILE)
+    format = '%(asctime)s %(message)s'
+    try:
+        logging.basicConfig(filename=file,level=level,format=format)
+    except:
+        try:
+            file2 = os.path.join(LOG_PATH2, LOG_FILE)
+            logging.basicConfig(filename=file2,level=level,format=format)
+            logging.warn("Default log file '{0}' could not be opened.".format(file))
+        except:
+            pass # what the hell
+    logging.info(sys.argv)
     
 # Parses command and executes. Returns error code or success or an angle if in command mode -getAngle
 # In order to get the return value back to the php layer each return value is
 # printed to stdout before the value is actually returned.
 def main():
-    logging.basicConfig(filename=LOG_FILE,level=logging.DEBUG,format='%(asctime)s %(message)s')
-    logging.info(sys.argv)
+    configureLogging()
     global mSetupDone
     mSetupDone = False
     if tryLockDevice() == False:
@@ -92,7 +110,7 @@ def main():
         if mSetupDone:
             resetGpioState()
         unlockDevice()
-        
+
 # Some strange entry point found in this language
 if __name__ == "__main__":
     main()
