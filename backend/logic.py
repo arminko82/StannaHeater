@@ -31,6 +31,7 @@ def doSetup():
 # Performs setup which automatically cleans GPIO state when the process ends.
 def powerOff():
     doSetup()
+    resetGpioState()
     return RESULT_OK
 # Performs a calibration by turning the rotor counterclockwise till the limiter button
 # is hit. After achieving this position the content on the angle file is reset to contain 0.

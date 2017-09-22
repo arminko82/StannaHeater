@@ -27,8 +27,9 @@ def setup():
         logging.debug("Setup: Setting GPIO modes ...")
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-    except:
-        raise NoDeviceLibraryFoundException()
+    except Exception as x:
+        logging.error(x)
+        raise NoDeviceLibraryFoundException(x)
     
     Seq[0] = [1,0,0,0]
     Seq[1] = [1,1,0,0]
