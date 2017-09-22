@@ -31,13 +31,14 @@ def doSetup():
 # Power is on while the current process is active, so this is a placeholder to
 # be called doing nothing and implicitly powering down after process ends.
 def powerOff():
+    doSetup()
     return RESULT_OK
 # Performs a calibration by turning the rotor counterclockwise till the limiter button
 # is hit. After achieving this position the content on the angle file is reset to contain 0.
 def doCalibrate():
     try:
         doSetup()
-        raise Exception("No handling for implemented yet, no hardware created.")
+        raise Exception("No handling for doCalibrate implemented yet, no hardware created.")
         writeAngleFile(0)
         return RESULT_OK
     except NoDeviceLibraryFoundException as e:
