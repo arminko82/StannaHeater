@@ -27,7 +27,11 @@ def doSetup():
         return
     mSetupDone = True
     setup()
-    
+
+# Power is on while the current process is active, so this is a placeholder to
+# be called doing nothing and implicitly powering down after process ends.
+def powerOff():
+    return RESULT_OK
 # Performs a calibration by turning the rotor counterclockwise till the limiter button
 # is hit. After achieving this position the content on the angle file is reset to contain 0.
 def doCalibrate():
