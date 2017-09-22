@@ -21,20 +21,15 @@ enable_pin   = 7 # main switch
 StepCount = 8
 Seq = list(range(0, StepCount))
 
-# Calls setup and powers on
-def setup():
-    setup(true)
-
 # Prepares all definitions and sets up the GPIO ports.
 # On powerOn set the main switch is turned on at the end of setup
-def setup(powerOn):
+def setup(powerOn=False):
     try:
         logging.debug("Setup: Setting GPIO modes ...")
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
     except Exception as x:
-        logging.error(x)
-        raise NoDeviceLibraryFoundException(x)
+        raise NoDeviceLibraryFoundException()
     
     Seq[0] = [1,0,0,0]
     Seq[1] = [1,1,0,0]

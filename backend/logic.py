@@ -30,7 +30,7 @@ def doSetup():
 
 # Performs setup which automatically cleans GPIO state when the process ends.
 def powerOff():
-    setup(false)
+    setup()
     resetGpioState()
     return RESULT_OK
 # Performs a calibration by turning the rotor counterclockwise till the limiter button
